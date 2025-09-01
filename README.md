@@ -74,7 +74,7 @@ pip install numpy
 
 ### Database Requirements
 - **SQLite3** (included with Python)
-- **Pokemon.db** - Download before running the application: https://gofile.io/d/ErILTY
+- **Pokemon.db** - Download and place inside the same folder as the .py app before running the application: https://gofile.io/d/ErILTY
 
 ## 🚀 Installation
 
@@ -130,24 +130,24 @@ The application supports all Pokemon types with beautiful icons:
 
 | Type | Icon | Description |
 |------|------|-------------|
-| <img src="images/Types/normal.png" alt="type" width="64" height="64"> **Normal** | Physical attacks, few weaknesses |
-| <img src="images/Types/fire.png" alt="type" width="64" height="64"> **Fire** | Strong against Grass, weak to Water |
-| <img src="Images/Types/water.png" alt="type" width="64" height="64"> **Water** | Strong against Fire, weak to Electric |
-| <img src="Images/Types/electric.png" alt="type" width="64" height="64"> **Electric** | Strong against Water, weak to Ground |
-| <img src="Images/Types/grass.png" alt="type" width="64" height="64"> **Grass** | Strong against Water, weak to Fire |
-| <img src="Images/Types/ice.png" alt="type" width="64" height="64"> **Ice** | Strong against Dragon, weak to Fire |
-| <img src="Images/Types/fighting.png" alt="type" width="64" height="64"> **Fighting** | Strong against Normal, weak to Flying |
-| <img src="Images/Types/poison.png" alt="type" width="64" height="64"> **Poison** | Strong against Grass, weak to Ground |
-| <img src="Images/Types/ground.png" alt="type" width="64" height="64"> **Ground** | Strong against Electric, weak to Water |
-| <img src="Images/Types/flying.png" alt="type" width="64" height="64"> **Flying** | Strong against Fighting, weak to Electric |
-| <img src="Images/Types/psychic.png" alt="type" width="64" height="64"> **Psychic** | Strong against Fighting, weak to Bug |
-| <img src="Images/Types/bug.png" alt="type" width="64" height="64"> **Bug** | Strong against Grass, weak to Fire |
-| <img src="Images/Types/rock.png" alt="type" width="64" height="64"> **Rock** | Strong against Flying, weak to Water |
-| <img src="Images/Types/ghost.png" alt="type" width="64" height="64"> **Ghost** | Strong against Psychic, weak to Ghost |
-| <img src="Images/Types/dragon.png" alt="type" width="64" height="64"> **Dragon** | Strong against Dragon, weak to Ice |
-| <img src="Images/Types/dark.png" alt="type" width="64" height="64"> **Dark** | Strong against Psychic, weak to Fighting |
-| <img src="Images/Types/steel.png" alt="type" width="64" height="64"> **Steel** | Strong against Ice, weak to Fire |
-| <img src="Images/Types/fairy.png" alt="type" width="64" height="64"> **Fairy** | Strong against Dragon, weak to Poison |
+| <img src="Images/Types/Normal.png" alt="type" width="64" height="64"> **Normal** | Physical attacks, few weaknesses |
+| <img src="Images/Types/Fire.png" alt="type" width="64" height="64"> **Fire** | Strong against Grass, weak to Water |
+| <img src="Images/Types/Water.png" alt="type" width="64" height="64"> **Water** | Strong against Fire, weak to Electric |
+| <img src="Images/Types/Electric.png" alt="type" width="64" height="64"> **Electric** | Strong against Water, weak to Ground |
+| <img src="Images/Types/Grass.png" alt="type" width="64" height="64"> **Grass** | Strong against Water, weak to Fire |
+| <img src="Images/Types/Ice.png" alt="type" width="64" height="64"> **Ice** | Strong against Dragon, weak to Fire |
+| <img src="Images/Types/Fighting.png" alt="type" width="64" height="64"> **Fighting** | Strong against Normal, weak to Flying |
+| <img src="Images/Types/Poison.png" alt="type" width="64" height="64"> **Poison** | Strong against Grass, weak to Ground |
+| <img src="Images/Types/Ground.png" alt="type" width="64" height="64"> **Ground** | Strong against Electric, weak to Water |
+| <img src="Images/Types/Flying.png" alt="type" width="64" height="64"> **Flying** | Strong against Fighting, weak to Electric |
+| <img src="Images/Types/Psychic.png" alt="type" width="64" height="64"> **Psychic** | Strong against Fighting, weak to Bug |
+| <img src="Images/Types/Bug.png" alt="type" width="64" height="64"> **Bug** | Strong against Grass, weak to Fire |
+| <img src="Images/Types/Rock.png" alt="type" width="64" height="64"> **Rock** | Strong against Flying, weak to Water |
+| <img src="Images/Types/Ghost.png" alt="type" width="64" height="64"> **Ghost** | Strong against Psychic, weak to Ghost |
+| <img src="Images/Types/Dragon.png" alt="type" width="64" height="64"> **Dragon** | Strong against Dragon, weak to Ice |
+| <img src="Images/Types/Dark.png" alt="type" width="64" height="64"> **Dark** | Strong against Psychic, weak to Fighting |
+| <img src="Images/Types/Steel.png" alt="type" width="64" height="64"> **Steel** | Strong against Ice, weak to Fire |
+| <img src="Images/Types/Fairy.png" alt="type" width="64" height="64"> **Fairy** | Strong against Dragon, weak to Poison |
 
 ## ⚔️ Move Categories
 
@@ -155,9 +155,9 @@ Moves are categorized by their type and damage class:
 
 | Category | Icon | Description |
 |----------|------|-------------|
-| <img src="Images/Types/physical.png" alt="type" width="64" height="64"> **Physical** | Physical attacks using Attack stat |
-| <img src="Images/Types/special.png" alt="type" width="64" height="64"> **Special** | Special attacks using Special Attack stat |
-| <img src="Images/Types/status.png" alt="type" width="64" height="64"> **Status** | Non-damaging moves that affect stats/conditions |
+| <img src="Images/Types/Physical.png" alt="type" width="64" height="64"> **Physical** | Physical attacks using Attack stat |
+| <img src="Images/Types/Special.png" alt="type" width="64" height="64"> **Special** | Special attacks using Special Attack stat |
+| <img src="Images/Types/Status.png" alt="type" width="64" height="64"> **Status** | Non-damaging moves that affect stats/conditions |
 
 ## 👥 Gender Information
 
@@ -165,9 +165,9 @@ Pokemon gender ratios are displayed with intuitive icons:
 
 | Gender | Icon | Description |
 |--------|------|-------------|
-| <img src="Images/Types/male.png" alt="type" width="64" height="64"> **Male** | Male-only or male-biased Pokemon |
-| <img src="Images/Types/female.png" alt="type" width="64" height="64"> **Female** | Female-only or female-biased Pokemon |
-| <img src="Images/Types/genderless.png" alt="type" width="64" height="64"> **Genderless** | Pokemon without gender |
+| <img src="Images/Types/Male.png" alt="type" width="64" height="64"> **Male** | Male-only or male-biased Pokemon |
+| <img src="Images/Types/Female.png" alt="type" width="64" height="64"> **Female** | Female-only or female-biased Pokemon |
+| <img src="Images/Types/Genderless.png" alt="type" width="64" height="64"> **Genderless** | Pokemon without gender |
 
 ## 🛠️ Troubleshooting
 
@@ -280,6 +280,7 @@ All Pokémon names, images, and related content remain the intellectual property
 
 **PKDEX** - Your comprehensive Pokemon companion! 🎮✨</content>
 <parameter name="filePath">d:\Pokedex\README.md
+
 
 
 
