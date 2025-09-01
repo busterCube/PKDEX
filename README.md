@@ -130,8 +130,8 @@ The application supports all Pokemon types with beautiful icons:
 
 | Type | Icon | Description |
 |------|------|-------------|
-| <img src="Images/Types/normal.png" alt="type" width="64" height="64"> **Normal** | Physical attacks, few weaknesses |
-| <img src="Images/Types/fire.png" alt="type" width="64" height="64"> **Fire** | Strong against Grass, weak to Water |
+| <img src="images/Types/normal.png" alt="type" width="64" height="64"> **Normal** | Physical attacks, few weaknesses |
+| <img src="images/Types/fire.png" alt="type" width="64" height="64"> **Fire** | Strong against Grass, weak to Water |
 | <img src="Images/Types/water.png" alt="type" width="64" height="64"> **Water** | Strong against Fire, weak to Electric |
 | <img src="Images/Types/electric.png" alt="type" width="64" height="64"> **Electric** | Strong against Water, weak to Ground |
 | <img src="Images/Types/grass.png" alt="type" width="64" height="64"> **Grass** | Strong against Water, weak to Fire |
@@ -280,5 +280,6 @@ All Pokémon names, images, and related content remain the intellectual property
 
 **PKDEX** - Your comprehensive Pokemon companion! 🎮✨</content>
 <parameter name="filePath">d:\Pokedex\README.md
+
 
 
