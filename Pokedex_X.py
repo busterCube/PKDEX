@@ -1088,27 +1088,60 @@ class PokedexXApp:
         self.breeding_display.pack(anchor=W)
     
     def setup_moves_tab(self):
-        """Setup the moves tab"""
+        """Setup the moves tab with side-by-side Moves and Move Details panels"""
         # Main container
-        moves_frame = ttk_boot.Frame(self.moves_tab, style='Custom.TFrame')
-        moves_frame.pack(fill=BOTH, expand=True, padx=10, pady=10)
-        
-        # Title
-        ttk_boot.Label(moves_frame, text="Pokemon Moves", 
-                      font=('Arial', 16, 'bold'), style='Custom.TLabel').pack(pady=(0, 10))
-        
+        main_frame = ttk_boot.Frame(self.moves_tab, style='Custom.TFrame')
+        main_frame.pack(fill=BOTH, expand=True, padx=5, pady=5)
+
+        # Create horizontal paned window for side-by-side layout
+        paned_window = ttk_boot.PanedWindow(main_frame, orient=HORIZONTAL, style='Custom.TFrame')
+        paned_window.pack(fill=BOTH, expand=True)
+
+        # Left panel - Moves
+        left_panel = ttk_boot.Frame(paned_window, style='Custom.TFrame')
+        paned_window.add(left_panel, weight=3)
+
+        # Left panel header
+        left_header = ttk_boot.Frame(left_panel, style='Custom.TFrame')
+        left_header.pack(fill=X, pady=(0, 5))
+        ttk_boot.Label(left_header, text="Moves", font=('Arial', 16, 'bold'),
+                      style='Custom.TLabel').pack(side=LEFT)
+        ttk_boot.Label(left_header, text="(Click any move for details)",
+                      font=('Arial', 10), style='Custom.TLabel').pack(side=RIGHT)
+
         # Moves display area
-        self.moves_display_frame = ttk_boot.Frame(moves_frame, style='Custom.TFrame')
+        self.moves_display_frame = ttk_boot.Frame(left_panel, style='Custom.TFrame')
         self.moves_display_frame.pack(fill=BOTH, expand=True)
-        
-        # Initially show placeholder
+
+        # Right panel - Move Details
+        right_panel = ttk_boot.Frame(paned_window, style='Custom.TFrame')
+        paned_window.add(right_panel, weight=2)
+
+        # Right panel header
+        ttk_boot.Label(right_panel, text="Move Details", font=('Arial', 16, 'bold'),
+                      style='Custom.TLabel').pack(anchor=W, pady=(0, 5))
+
+        # Move details display area
+        self.move_details_frame = ttk_boot.Frame(right_panel, style='Custom.TFrame')
+        self.move_details_frame.pack(fill=BOTH, expand=True)
+
+        # Initially show placeholder in left panel
         placeholder_label = ttk_boot.Label(
-            self.moves_display_frame, 
+            self.moves_display_frame,
             text="Select a Pokemon to view its moves",
-            font=('Arial', 14), 
+            font=('Arial', 12),
             style='Custom.TLabel'
         )
         placeholder_label.pack(expand=True)
+
+        # Initially show placeholder in right panel
+        details_placeholder = ttk_boot.Label(
+            self.move_details_frame,
+            text="Select a move to view its details",
+            font=('Arial', 12),
+            style='Custom.TLabel'
+        )
+        details_placeholder.pack(expand=True)
     
     def setup_team_builder_tab(self):
         """Setup the team builder tab"""
@@ -2172,13 +2205,9 @@ class PokedexXApp:
 
     def display_moves_info(self, level_up_moves_data, tutor_moves_data, tm_hm_moves_data, egg_moves_data):
         """Display moves information in the Moves tab"""
-        # Clear existing content
-        for widget in self.moves_tab.winfo_children():
+        # Clear existing content in moves display frame
+        for widget in self.moves_display_frame.winfo_children():
             widget.destroy()
-
-        # Create scrollable frame
-        scrollable_frame = ScrollableFrame(self.moves_tab, style='Custom.TFrame')
-        scrollable_frame.pack(fill=BOTH, expand=True)
 
         # Store data for filtering
         self.current_moves_data = level_up_moves_data
@@ -2186,21 +2215,18 @@ class PokedexXApp:
         self.current_machines_data = tm_hm_moves_data
         self.current_egg_moves_data = egg_moves_data
 
-        # Store reference to the scrollable frame for filtering
-        self.moves_scrollable_frame = scrollable_frame.scrollable_frame
-
         # Initialize version variable if not exists
         if not hasattr(self, 'version_var'):
             self.version_var = ttk_boot.StringVar(value="All Versions")
 
         # Create initial display with all versions
         self.create_moves_display(level_up_moves_data, tutor_moves_data, tm_hm_moves_data, egg_moves_data,
-                               scrollable_frame.scrollable_frame, "All Versions")
+                               self.moves_display_frame, "All Versions")
 
     def filter_moves_by_version(self):
         """Filter moves by selected version"""
         selected_version = self.version_var.get()
-        self.create_moves_display(self.current_moves_data, self.current_tutor_moves_data, self.current_machines_data, self.current_egg_moves_data, self.moves_scrollable_frame, selected_version)
+        self.create_moves_display(self.current_moves_data, self.current_tutor_moves_data, self.current_machines_data, self.current_egg_moves_data, self.moves_display_frame, selected_version)
 
     def create_moves_display(self, level_up_moves_data, tutor_moves_data, tm_hm_moves_data, egg_moves_data, parent_frame, selected_version):
         """Create the moves display with filtering"""
@@ -2208,8 +2234,13 @@ class PokedexXApp:
         for widget in parent_frame.winfo_children():
             widget.destroy()
 
+        # Create scrollable frame within the parent
+        scrollable_frame = ScrollableFrame(parent_frame, style='Custom.TFrame')
+        scrollable_frame.pack(fill=BOTH, expand=True)
+        content_frame = scrollable_frame.scrollable_frame
+
         # Recreate version selection dropdown
-        version_frame = ttk_boot.Frame(parent_frame, style='Custom.TFrame')
+        version_frame = ttk_boot.Frame(content_frame, style='Custom.TFrame')
         version_frame.pack(fill=X, pady=(0, 10))
 
         ttk_boot.Label(version_frame, text="Filter by Version:", font=('Arial', 10, 'bold'),
@@ -2263,7 +2294,7 @@ class PokedexXApp:
 
         # Level up moves section
         if filtered_moves:
-            moves_frame = ttk_boot.LabelFrame(parent_frame, text="Level Up Moves", padding=10, style='Custom.TLabelframe')
+            moves_frame = ttk_boot.LabelFrame(content_frame, text="Level Up Moves", padding=10, style='Custom.TLabelframe')
             moves_frame.pack(fill=X, pady=(10, 10))
 
             # Create treeview for moves
@@ -2278,11 +2309,13 @@ class PokedexXApp:
             for move_name, level, method, version in filtered_moves:
                 tree.insert('', 'end', values=(level, move_name, method, version or "N/A"))
 
+            # Bind selection event to show move details
+            tree.bind('<<TreeviewSelect>>', lambda e, tree=tree: self.on_move_selected(tree, 'level_up'))
             tree.pack(fill=X)
 
         # Tutor moves section
         if filtered_tutor_moves:
-            tutor_frame = ttk_boot.LabelFrame(parent_frame, text="Tutor Moves", padding=10, style='Custom.TLabelframe')
+            tutor_frame = ttk_boot.LabelFrame(content_frame, text="Tutor Moves", padding=10, style='Custom.TLabelframe')
             tutor_frame.pack(fill=X, pady=(0, 10))
 
             # Create treeview for tutor moves
@@ -2297,11 +2330,13 @@ class PokedexXApp:
             for move_name, level, method, version in filtered_tutor_moves:
                 tree.insert('', 'end', values=(move_name, method.title(), version or "N/A"))
 
+            # Bind selection event to show move details
+            tree.bind('<<TreeviewSelect>>', lambda e, tree=tree: self.on_move_selected(tree, 'tutor'))
             tree.pack(fill=X)
 
         # Egg moves section
         if filtered_egg_moves:
-            egg_frame = ttk_boot.LabelFrame(parent_frame, text="Egg Moves", padding=10, style='Custom.TLabelframe')
+            egg_frame = ttk_boot.LabelFrame(content_frame, text="Egg Moves", padding=10, style='Custom.TLabelframe')
             egg_frame.pack(fill=X, pady=(0, 10))
 
             # Create treeview for egg moves
@@ -2318,11 +2353,13 @@ class PokedexXApp:
                 pp_text = str(move_pp) if move_pp else "—"
                 tree.insert('', 'end', values=(move_name, move_type.title(), power_text, pp_text, version or "N/A"))
 
+            # Bind selection event to show move details
+            tree.bind('<<TreeviewSelect>>', lambda e, tree=tree: self.on_move_selected(tree, 'egg'))
             tree.pack(fill=X)
 
         # TM/HM moves section
         if filtered_tm_hm_moves:
-            machines_frame = ttk_boot.LabelFrame(parent_frame, text="TM/HM Moves", padding=10, style='Custom.TLabelframe')
+            machines_frame = ttk_boot.LabelFrame(content_frame, text="TM/HM Moves", padding=10, style='Custom.TLabelframe')
             machines_frame.pack(fill=X, pady=(0, 10))
 
             # Create treeview for TM/HM moves
@@ -2338,7 +2375,243 @@ class PokedexXApp:
                 tm_hm_text = f"{machine_id:02d}" if machine_id else "??"
                 tree.insert('', 'end', values=(tm_hm_text, move_name, item_name.upper(), version_group_name or "N/A"))
 
+            # Bind selection event to show move details
+            tree.bind('<<TreeviewSelect>>', lambda e, tree=tree: self.on_move_selected(tree, 'tm_hm'))
             tree.pack(fill=X)
+
+    def on_move_selected(self, tree, move_type):
+        """Handle move selection from treeview"""
+        selection = tree.selection()
+        if selection:
+            item = tree.item(selection[0])
+            values = item['values']
+            
+            # Extract move name based on move type
+            if move_type == 'level_up':
+                move_name = values[1]  # Level, Move, Method, Version
+            elif move_type == 'tutor':
+                move_name = values[0]  # Move, Method, Version
+            elif move_type == 'egg':
+                move_name = values[0]  # Move, Type, Power, PP, Version
+            elif move_type == 'tm_hm':
+                move_name = values[1]  # TM/HM, Move, Item, Version
+            
+            if move_name:
+                self.display_move_details(move_name)
+
+    def display_move_details(self, move_name):
+        """Display detailed information for the selected move"""
+        # Clear existing content
+        for widget in self.move_details_frame.winfo_children():
+            widget.destroy()
+
+        try:
+            # Connect to database
+            conn = sqlite3.connect(self.db_name)
+            cursor = conn.cursor()
+
+            # Get move details from New_Pokemon_Moves table
+            cursor.execute("""
+                SELECT name, accuracy, pp, priority, power, damage_class, effect_entries, type_name
+                FROM New_Pokemon_Moves
+                WHERE name = ?
+            """, (move_name,))
+            
+            move_data = cursor.fetchone()
+            
+            # Get additional move data from New_Pokemon_Move_Learning_Data table
+            cursor.execute("""
+                SELECT move_effect
+                FROM New_Pokemon_Move_Learning_Data
+                WHERE move_name = ?
+                LIMIT 1
+            """, (move_name,))
+            
+            learning_data = cursor.fetchone()
+            move_effect = learning_data[0] if learning_data and learning_data[0] else None
+            
+            # Get contest data from New_Pokemon_Contest_Data table
+            cursor.execute("""
+                SELECT contest_type, contest_effect_appeal, contest_effect_jam,
+                       contest_effect_description, contest_effect_flavor_text,
+                       super_contest_effect_appeal, super_contest_effect_flavor_text
+                FROM New_Pokemon_Contest_Data
+                WHERE move_name = ?
+            """, (move_name,))
+            
+            contest_data = cursor.fetchone()
+            
+            if move_data:
+                name, accuracy, pp, priority, power, damage_class, effect_entries, type_name = move_data
+                
+                # Create scrollable frame for move details
+                scrollable_frame = ScrollableFrame(self.move_details_frame, style='Custom.TFrame')
+                scrollable_frame.pack(fill=BOTH, expand=True)
+                content_frame = scrollable_frame.scrollable_frame
+                
+                # Move name
+                ttk_boot.Label(content_frame, text=move_name.title(), 
+                              font=('Arial', 18, 'bold'), style='Custom.TLabel').pack(pady=(0, 10))
+                
+                # Basic stats frame
+                stats_frame = ttk_boot.LabelFrame(content_frame, text="Move Stats", padding=10, style='Custom.TLabelframe')
+                stats_frame.pack(fill=X, pady=(0, 10))
+                
+                # Create grid layout for stats
+                stat_grid = ttk_boot.Frame(stats_frame, style='Custom.TFrame')
+                stat_grid.pack(fill=X)
+                
+                # PP
+                ttk_boot.Label(stat_grid, text="PP:", font=('Arial', 10, 'bold'), style='Custom.TLabel').grid(row=0, column=0, sticky=W, padx=(0, 5))
+                ttk_boot.Label(stat_grid, text=str(pp) if pp else "—", style='Custom.TLabel').grid(row=0, column=1, sticky=W, padx=(0, 20))
+                
+                # Power
+                ttk_boot.Label(stat_grid, text="Power:", font=('Arial', 10, 'bold'), style='Custom.TLabel').grid(row=0, column=2, sticky=W, padx=(0, 5))
+                ttk_boot.Label(stat_grid, text=str(power) if power else "—", style='Custom.TLabel').grid(row=0, column=3, sticky=W, padx=(0, 20))
+                
+                # Accuracy
+                ttk_boot.Label(stat_grid, text="Accuracy:", font=('Arial', 10, 'bold'), style='Custom.TLabel').grid(row=1, column=0, sticky=W, padx=(0, 5))
+                ttk_boot.Label(stat_grid, text=f"{accuracy}%" if accuracy else "—", style='Custom.TLabel').grid(row=1, column=1, sticky=W, padx=(0, 20))
+                
+                # Priority
+                ttk_boot.Label(stat_grid, text="Priority:", font=('Arial', 10, 'bold'), style='Custom.TLabel').grid(row=1, column=2, sticky=W, padx=(0, 5))
+                ttk_boot.Label(stat_grid, text=str(priority) if priority else "0", style='Custom.TLabel').grid(row=1, column=3, sticky=W)
+                
+                # Damage class with icon
+                ttk_boot.Label(stat_grid, text="Damage Class:", font=('Arial', 10, 'bold'), style='Custom.TLabel').grid(row=2, column=0, sticky=W, padx=(0, 5), pady=(10, 0))
+                
+                damage_class_frame = ttk_boot.Frame(stat_grid, style='Custom.TFrame')
+                damage_class_frame.grid(row=2, column=1, sticky=W, pady=(10, 0))
+                
+                # Load damage class icon
+                icon_path = f"images/Types/{damage_class.lower()}.png"
+                try:
+                    if os.path.exists(icon_path):
+                        icon_image = Image.open(icon_path)
+                        icon_image = icon_image.resize((20, 20), Image.Resampling.LANCZOS)
+                        icon_photo = ImageTk.PhotoImage(icon_image)
+                        icon_label = ttk_boot.Label(damage_class_frame, image=icon_photo, style='Custom.TLabel')
+                        icon_label.image = icon_photo  # Keep reference
+                        icon_label.pack(side=LEFT)
+                except Exception as e:
+                    print(f"Could not load damage class icon: {e}")
+                
+                ttk_boot.Label(damage_class_frame, text=damage_class.title(), style='Custom.TLabel').pack(side=LEFT, padx=(5, 0))
+                
+                # Add newline after Damage Class
+                ttk_boot.Label(stat_grid, text="", style='Custom.TLabel').grid(row=3, column=0, pady=(5, 0))
+                
+                # Type with icon
+                ttk_boot.Label(stat_grid, text="Type:", font=('Arial', 10, 'bold'), style='Custom.TLabel').grid(row=4, column=0, sticky=W, padx=(0, 5), pady=(10, 0))
+                
+                type_frame = ttk_boot.Frame(stat_grid, style='Custom.TFrame')
+                type_frame.grid(row=4, column=1, sticky=W, pady=(10, 0))
+                
+                # Load type icon
+                if type_name:
+                    type_icon_path = f"images/Types/{type_name.lower()}.png"
+                    try:
+                        if os.path.exists(type_icon_path):
+                            type_icon_image = Image.open(type_icon_path)
+                            type_icon_image = type_icon_image.resize((20, 20), Image.Resampling.LANCZOS)
+                            type_icon_photo = ImageTk.PhotoImage(type_icon_image)
+                            type_icon_label = ttk_boot.Label(type_frame, image=type_icon_photo, style='Custom.TLabel')
+                            type_icon_label.image = type_icon_photo  # Keep reference
+                            type_icon_label.pack(side=LEFT)
+                    except Exception as e:
+                        print(f"Could not load type icon: {e}")
+                
+                ttk_boot.Label(type_frame, text=type_name.title() if type_name else "—", style='Custom.TLabel').pack(side=LEFT, padx=(5, 0))
+                
+                # Effect/Flavor text from both tables
+                effects_to_display = []
+                
+                # Effect from New_Pokemon_Moves table
+                if effect_entries:
+                    try:
+                        effects = json.loads(effect_entries)
+                        if effects:
+                            # Get the first English effect
+                            for effect in effects:
+                                if effect.get('language', {}).get('name') == 'en':
+                                    english_effect = effect.get('effect', '')
+                                    if english_effect:
+                                        effects_to_display.append(("Move Effect (API)", english_effect))
+                                    break
+                    except:
+                        pass
+                
+                # Effect from New_Pokemon_Move_Learning_Data table
+                if move_effect:
+                    effects_to_display.append(("Move Effect (Database)", move_effect))
+                
+                # Display all effects
+                if effects_to_display:
+                    for i, (effect_title, effect_text) in enumerate(effects_to_display):
+                        effect_frame = ttk_boot.LabelFrame(content_frame, text=effect_title, padding=10, style='Custom.TLabelframe')
+                        effect_frame.pack(fill=X, pady=(10, 10) if i == 0 else (0, 10))
+                        
+                        effect_label = ttk_boot.Label(effect_frame, text=effect_text, 
+                                                    wraplength=400, justify=LEFT, style='Custom.TLabel')
+                        effect_label.pack(anchor=W)
+                
+                # Contest data from New_Pokemon_Contest_Data table
+                if contest_data:
+                    contest_type, contest_appeal, contest_jam, effect_description, effect_flavor_text, super_appeal, super_flavor_text = contest_data
+                    
+                    contest_frame = ttk_boot.LabelFrame(content_frame, text="Contest Information", padding=10, style='Custom.TLabelframe')
+                    contest_frame.pack(fill=X, pady=(0, 10))
+                    
+                    # Contest type
+                    if contest_type:
+                        ttk_boot.Label(contest_frame, text=f"Contest Type: {contest_type.title()}", 
+                                     font=('Arial', 10, 'bold'), style='Custom.TLabel').pack(anchor=W, pady=(0, 5))
+                    
+                    # Contest stats
+                    if contest_appeal is not None or contest_jam is not None:
+                        stats_text = ""
+                        if contest_appeal is not None:
+                            stats_text += f"Appeal: {contest_appeal}"
+                        if contest_jam is not None:
+                            if stats_text:
+                                stats_text += " | "
+                            stats_text += f"Jam: {contest_jam}"
+                        ttk_boot.Label(contest_frame, text=stats_text, style='Custom.TLabel').pack(anchor=W)
+                    
+                    # Effect description
+                    if effect_description:
+                        ttk_boot.Label(contest_frame, text=f"Effect: {effect_description}", 
+                                     style='Custom.TLabel').pack(anchor=W, pady=(5, 0))
+                    
+                    # Effect flavor text
+                    if effect_flavor_text:
+                        ttk_boot.Label(contest_frame, text=f"Flavor: {effect_flavor_text}", 
+                                     style='Custom.TLabel').pack(anchor=W, pady=(5, 0))
+                    
+                    # Super contest info
+                    if super_appeal is not None or super_flavor_text:
+                        ttk_boot.Label(contest_frame, text="Super Contest:", 
+                                     font=('Arial', 10, 'bold'), style='Custom.TLabel').pack(anchor=W, pady=(10, 0))
+                        
+                        if super_appeal is not None:
+                            ttk_boot.Label(contest_frame, text=f"Appeal: {super_appeal}", 
+                                         style='Custom.TLabel').pack(anchor=W)
+                        
+                        if super_flavor_text:
+                            ttk_boot.Label(contest_frame, text=f"Flavor: {super_flavor_text}", 
+                                         style='Custom.TLabel').pack(anchor=W)
+                
+            else:
+                # Move not found in detailed database
+                ttk_boot.Label(scrollable_frame.scrollable_frame, text=f"Move details not available for {move_name}", 
+                              font=('Arial', 12), style='Custom.TLabel').pack(expand=True)
+            
+            conn.close()
+            
+        except Exception as e:
+            print(f"Error displaying move details: {e}")
+            ttk_boot.Label(self.move_details_frame, text=f"Error loading move details: {str(e)}", 
+                          font=('Arial', 12), style='Custom.TLabel').pack(expand=True)
 
     def display_evolution_info(self, evolution_data):
         """Display evolution information in the Evolution tab"""
