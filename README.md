@@ -1,4 +1,5 @@
-# ![PKDEX Banner](Images/banner/PKDEX_banner.png)
+<img src="Images/banner/PKDEX_banner.png" alt="banner" width="100" height="100">
+
 
 # PKDEX - Enhanced Pokedex Application
 
@@ -166,7 +167,7 @@ Pokemon gender ratios are displayed with intuitive icons:
 |--------|------|-------------|
 | ![Male](Images/Types/Male.png) **Male** | Male-only or male-biased Pokemon |
 | ![Female](Images/Types/Female.png) **Female** | Female-only or female-biased Pokemon |
-| ![Genderless](Images/Types/Genderless.png) **Genderless** | Pokemon without gender (cannot breed) |
+| ![Genderless](Images/Types/Genderless.png) **Genderless** | Pokemon without gender |
 
 ## 🛠️ Troubleshooting
 
@@ -279,3 +280,4 @@ All Pokémon names, images, and related content remain the intellectual property
 
 **PKDEX** - Your comprehensive Pokemon companion! 🎮✨</content>
 <parameter name="filePath">d:\Pokedex\README.md
+
